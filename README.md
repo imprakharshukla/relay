@@ -1,22 +1,22 @@
-# Relay CLI 🚀
+# Relay CLI
 
 > AI-powered Linear issue creation with automatic git worktree setup
 
 Relay is a powerful CLI tool that streamlines your development workflow by combining AI-assisted issue creation, Linear integration, and automatic git worktree management. Just describe your task in natural language, and Relay handles the rest.
 
-## ✨ Features
+## Features
 
-- 🤖 **AI-Powered Issue Generation**: Uses Grok-4 via OpenRouter to analyze your task and create comprehensive Linear issues
-- 📋 **Smart Context Awareness**: Automatically selects the right project, labels, and priority based on your task description
-- 🌳 **Automatic Git Worktrees**: Creates isolated worktrees for each issue with the Linear-generated branch name
-- 🔄 **Interactive Issue Switcher**: Quickly switch between your assigned Linear issues with worktree management
-- 📝 **Smart Commit Messages**: AI-generated conventional commit messages with co-author detection
-- 🚀 **AI-Powered PR Creation**: Generate comprehensive pull requests with auto-linked Linear issues
-- 💻 **Editor Integration**: Automatically opens your preferred editor (VS Code, Cursor, or Zed)
-- ⚡ **Built with Bun**: Lightning-fast startup and execution
-- 🎨 **Beautiful CLI UI**: Interactive setup and real-time feedback with Ink
+- **AI-Powered Issue Generation**: Uses Grok-4 via OpenRouter to analyze your task and create comprehensive Linear issues
+- **Smart Context Awareness**: Automatically selects the right project, labels, and priority based on your task description
+- **Automatic Git Worktrees**: Creates isolated worktrees for each issue with the Linear-generated branch name
+- **Interactive Issue Switcher**: Quickly switch between your assigned Linear issues with worktree management
+- **Smart Commit Messages**: AI-generated conventional commit messages with co-author detection
+- **AI-Powered PR Creation**: Generate comprehensive pull requests with auto-linked Linear issues
+- **Editor Integration**: Automatically opens your preferred editor (VS Code, Cursor, or Zed)
+- **Built with Bun**: Lightning-fast startup and execution
+- **Beautiful CLI UI**: Interactive setup and real-time feedback with Ink
 
-## 📦 Installation
+## Installation
 
 ### Using Bun (Recommended)
 
@@ -40,7 +40,7 @@ bun run build
 bun link
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Setup
 
@@ -66,11 +66,11 @@ relay "fixing component library button styling"
 ```
 
 Relay will:
-1. ✅ Analyze your task with AI
-2. 📊 Select the appropriate project and labels
-3. 📝 Create a detailed Linear issue
-4. 🌲 Set up a git worktree
-5. 🚀 Open your editor in the worktree
+1. Analyze your task with AI
+2. Select the appropriate project and labels
+3. Create a detailed Linear issue
+4. Set up a git worktree
+5. Open your editor in the worktree
 
 ### 3. Advanced Usage
 
@@ -80,7 +80,7 @@ Specify a team:
 relay "add authentication" --team ENG
 ```
 
-## 📚 Commands
+## Commands
 
 ### Main Commands
 
@@ -132,7 +132,7 @@ relay auth status
 relay config show
 ```
 
-## 🏗️ How It Works
+## How It Works
 
 1. **Context Gathering**: Relay fetches all available teams, projects, and labels from your Linear workspace
 
@@ -149,7 +149,7 @@ relay config show
 
 5. **Editor Launch**: Your configured editor opens automatically in the new worktree
 
-## 🔄 Workflow Commands
+## Workflow Commands
 
 ### Switch Between Issues
 
@@ -196,7 +196,7 @@ AI-generated conventional commit messages:
 
 Make sure to stage your changes with `git add` before running this command.
 
-## ⚙️ Configuration
+## Configuration
 
 Configuration is stored in `.relay/relay-config.json` at your repository root:
 
@@ -307,11 +307,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-MIT © [Your Name]
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Built with [Ink](https://github.com/vadimdemedes/ink) for beautiful CLI UIs
 - Powered by [Vercel AI SDK](https://github.com/vercel/ai) and [OpenRouter](https://openrouter.ai/)
@@ -326,4 +322,4 @@ MIT © [Your Name]
 
 ---
 
-Made with ❤️ and ☕ by [Your Name]
+Made with ❤️ and ☕ by prakhar

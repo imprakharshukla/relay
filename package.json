@@ -32,12 +32,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/prakharshukla/relay.git"
+    "url": "https://github.com/imprakharshukla/relay.git"
   },
   "bugs": {
-    "url": "https://github.com/prakharshukla/relay/issues"
+    "url": "https://github.com/imprakharshukla/relay/issues"
   },
-  "homepage": "https://github.com/prakharshukla/relay#readme",
+  "homepage": "https://github.com/imprakharshukla/relay#readme",
   "dependencies": {
     "@ai-sdk/openai": "^1.0.11",
     "@linear/sdk": "^60.0.0",
