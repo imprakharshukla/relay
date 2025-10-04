@@ -4,6 +4,9 @@ import { render } from 'ink';
 import { Command } from 'commander';
 import { Setup } from './commands/setup.js';
 import { Create } from './commands/create.js';
+import { PR } from './commands/pr.js';
+import { Switch } from './commands/switch.js';
+import { Commit } from './commands/commit.js';
 import { hasRequiredKeys, setOpenRouterKey, setLinearKey, getOpenRouterKey, getLinearKey } from './utils/storage.js';
 import { loadConfig } from './services/config.js';
 
@@ -20,6 +23,30 @@ program
   .description('Configure Relay CLI')
   .action(() => {
     render(<Setup />);
+  });
+
+// PR command
+program
+  .command('pr')
+  .description('Create a pull request with AI-generated title and description')
+  .action(() => {
+    render(<PR />);
+  });
+
+// Switch command
+program
+  .command('switch')
+  .description('Interactively switch between your assigned Linear issues')
+  .action(() => {
+    render(<Switch />);
+  });
+
+// Commit command
+program
+  .command('commit')
+  .description('Create a commit with AI-generated conventional commit message')
+  .action(() => {
+    render(<Commit />);
   });
 
 // Create issue command (default)
@@ -96,6 +123,7 @@ config
 
     console.log('Current Configuration:');
     console.log(`  Repo Base: ${cfg.repoBase}`);
+    console.log(`  Base Branch: ${cfg.baseBranch}`);
     console.log(`  Worktree Base: ${cfg.worktreeBase}`);
     console.log(`  Editor: ${cfg.editor}`);
     if (cfg.defaultTeam) {

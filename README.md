@@ -9,6 +9,9 @@ Relay is a powerful CLI tool that streamlines your development workflow by combi
 - 🤖 **AI-Powered Issue Generation**: Uses Grok-4 via OpenRouter to analyze your task and create comprehensive Linear issues
 - 📋 **Smart Context Awareness**: Automatically selects the right project, labels, and priority based on your task description
 - 🌳 **Automatic Git Worktrees**: Creates isolated worktrees for each issue with the Linear-generated branch name
+- 🔄 **Interactive Issue Switcher**: Quickly switch between your assigned Linear issues with worktree management
+- 📝 **Smart Commit Messages**: AI-generated conventional commit messages with co-author detection
+- 🚀 **AI-Powered PR Creation**: Generate comprehensive pull requests with auto-linked Linear issues
 - 💻 **Editor Integration**: Automatically opens your preferred editor (VS Code, Cursor, or Zed)
 - ⚡ **Built with Bun**: Lightning-fast startup and execution
 - 🎨 **Beautiful CLI UI**: Interactive setup and real-time feedback with Ink
@@ -96,6 +99,19 @@ relay --version
 relay --help
 ```
 
+### Workflow Commands
+
+```bash
+# Switch between assigned issues
+relay switch
+
+# Create a pull request with AI-generated content
+relay pr
+
+# Create a commit with AI-generated conventional commit message
+relay commit
+```
+
 ### Authentication
 
 ```bash
@@ -132,6 +148,53 @@ relay config show
 4. **Worktree Setup**: A new git worktree is created using Linear's branch name format
 
 5. **Editor Launch**: Your configured editor opens automatically in the new worktree
+
+## 🔄 Workflow Commands
+
+### Switch Between Issues
+
+```bash
+relay switch
+```
+
+Interactively switch between your assigned Linear issues:
+- Fetches all issues assigned to you
+- Displays them in an interactive list
+- Checks if a worktree already exists for the selected issue
+- Creates a new worktree if needed or switches to the existing one
+- Opens your configured editor in the worktree
+
+Perfect for quickly jumping between multiple tasks!
+
+### Create Pull Requests
+
+```bash
+relay pr
+```
+
+AI-powered pull request creation:
+- Analyzes all commits on your current branch
+- Generates a comprehensive PR title and description
+- Automatically links the Linear issue from your branch name
+- Suggests reviewers based on file history
+- Creates the PR via GitHub CLI
+
+Requires [GitHub CLI](https://cli.github.com/) to be installed and authenticated.
+
+### Smart Commits
+
+```bash
+relay commit
+```
+
+AI-generated conventional commit messages:
+- Analyzes your staged changes
+- Generates a conventional commit message (feat, fix, refactor, etc.)
+- Automatically detects co-authors from file history
+- Links the Linear issue from your branch name
+- Shows a preview before committing
+
+Make sure to stage your changes with `git add` before running this command.
 
 ## ⚙️ Configuration
 
@@ -183,7 +246,10 @@ relay-cli/
 ├── src/
 │   ├── commands/          # Command implementations
 │   │   ├── create.tsx     # Issue creation flow
-│   │   └── setup.tsx      # Setup wizard
+│   │   ├── setup.tsx      # Setup wizard
+│   │   ├── pr.tsx         # PR creation
+│   │   ├── switch.tsx     # Issue switcher
+│   │   └── commit.tsx     # Smart commits
 │   ├── components/        # Ink UI components
 │   │   ├── Spinner.tsx
 │   │   └── IssuePreview.tsx
@@ -191,6 +257,7 @@ relay-cli/
 │   │   ├── ai.ts          # OpenRouter/AI integration
 │   │   ├── linear.ts      # Linear API wrapper
 │   │   ├── git.ts         # Git worktree operations
+│   │   ├── pr.ts          # PR generation
 │   │   ├── config.ts      # Config management
 │   │   └── editor.ts      # Editor launcher
 │   ├── utils/             # Utilities
