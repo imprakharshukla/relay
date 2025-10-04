@@ -105,7 +105,8 @@ export const Switch: React.FC = () => {
           config.repoBase,
           config.worktreeBase,
           branchName,
-          config.baseBranch || 'main'
+          config.baseBranch || 'main',
+          config.startupScripts
         );
 
         setWorktreePath(newWorktreePath);

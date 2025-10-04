@@ -9,7 +9,7 @@ import { LinearService } from '../services/linear.js';
 import { validatePath, validateApiKey, isGitRepository } from '../utils/validation.js';
 import type { Editor } from '../types/index.js';
 
-type SetupStep = 'openrouter' | 'linear' | 'repoBase' | 'baseBranch' | 'worktreeBase' | 'editor' | 'testing' | 'complete';
+type SetupStep = 'openrouter' | 'linear' | 'repoBase' | 'baseBranch' | 'worktreeBase' | 'startupScripts' | 'editor' | 'testing' | 'complete';
 
 const editorOptions = [
   { label: 'VS Code', value: 'vscode' },
@@ -25,6 +25,7 @@ export const Setup: React.FC = () => {
   const [repoBase, setRepoBase] = useState(process.cwd());
   const [baseBranch, setBaseBranch] = useState('main');
   const [worktreeBase, setWorktreeBase] = useState('../worktrees');
+  const [startupScriptsInput, setStartupScriptsInput] = useState('');
   const [selectedEditor, setSelectedEditor] = useState<Editor>('cursor');
   const [error, setError] = useState('');
   const [testing, setTesting] = useState(false);
@@ -95,16 +96,27 @@ export const Setup: React.FC = () => {
         break;
 
       case 'worktreeBase':
+        setStep('startupScripts');
+        break;
+
+      case 'startupScripts':
         setStep('editor');
         break;
 
       case 'editor':
+        // Parse startup scripts (comma or newline separated)
+        const startupScripts = startupScriptsInput
+          .split(/[,\n]/)
+          .map(s => s.trim())
+          .filter(s => s.length > 0);
+
         // Save configuration
         saveConfig({
           repoBase,
           editor: selectedEditor,
           worktreeBase,
-          baseBranch
+          baseBranch,
+          startupScripts: startupScripts.length > 0 ? startupScripts : undefined
         }, repoBase);
         setStep('complete');
         setTimeout(() => exit(), 2000);
@@ -226,6 +238,23 @@ export const Setup: React.FC = () => {
               onChange={setWorktreeBase}
               onSubmit={handleSubmit}
               placeholder="../worktrees"
+            />
+          </Box>
+        </Box>
+      )}
+
+      {step === 'startupScripts' && (
+        <Box flexDirection="column">
+          <Text>Startup scripts to run when creating worktrees (optional):</Text>
+          <Text dimColor>(Comma-separated commands, e.g., "pnpm i, doppler setup -p project")</Text>
+          <Text dimColor>(Press Enter to skip or continue)</Text>
+          <Box marginTop={1}>
+            <Text>Scripts: </Text>
+            <TextInput
+              value={startupScriptsInput}
+              onChange={setStartupScriptsInput}
+              onSubmit={handleSubmit}
+              placeholder="pnpm i, doppler setup..."
             />
           </Box>
         </Box>

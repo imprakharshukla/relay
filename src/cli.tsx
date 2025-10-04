@@ -139,6 +139,12 @@ config
     if (cfg.defaultTeam) {
       console.log(`  Default Team: ${cfg.defaultTeam}`);
     }
+    if (cfg.startupScripts && cfg.startupScripts.length > 0) {
+      console.log(`  Startup Scripts:`);
+      cfg.startupScripts.forEach((script, i) => {
+        console.log(`    ${i + 1}. ${script}`);
+      });
+    }
   });
 
 program.parse();

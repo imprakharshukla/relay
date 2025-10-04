@@ -6,7 +6,8 @@ export const createWorktree = async (
   repoBase: string,
   worktreeBase: string,
   branchName: string,
-  baseBranch: string = 'main'
+  baseBranch: string = 'main',
+  startupScripts?: string[]
 ): Promise<string> => {
   // Ensure repo base exists and is a git repo
   if (!existsSync(resolve(repoBase, '.git'))) {
@@ -32,6 +33,11 @@ export const createWorktree = async (
       cwd: repoBase
     });
 
+    // Run startup scripts if provided
+    if (startupScripts && startupScripts.length > 0) {
+      await runStartupScripts(worktreePath, startupScripts);
+    }
+
     return worktreePath;
   } catch (error: any) {
     if (error.message?.includes('already exists')) {
@@ -41,6 +47,24 @@ export const createWorktree = async (
       throw new Error(`Base branch '${baseBranch}' does not exist. Please check your config.`);
     }
     throw new Error(`Failed to create worktree: ${error.message}`);
+  }
+};
+
+export const runStartupScripts = async (
+  worktreePath: string,
+  scripts: string[]
+): Promise<void> => {
+  for (const script of scripts) {
+    try {
+      // Execute each script in the worktree directory
+      await execa(script, {
+        cwd: worktreePath,
+        shell: true,
+        stdio: 'inherit' // Show output to user
+      });
+    } catch (error: any) {
+      throw new Error(`Failed to run startup script "${script}": ${error.message}`);
+    }
   }
 };
 

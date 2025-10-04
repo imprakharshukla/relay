@@ -4,6 +4,7 @@ export interface RelayConfig {
   defaultTeam?: string;
   worktreeBase: string;
   baseBranch: string;
+  startupScripts?: string[];
 }
 
 export interface AIGeneratedIssue {

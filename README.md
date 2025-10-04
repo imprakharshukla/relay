@@ -221,9 +221,24 @@ Configuration is stored in `.relay/relay-config.json` at your repository root:
   "repoBase": "/path/to/your/repo",
   "editor": "cursor",
   "worktreeBase": "../worktrees",
-  "defaultTeam": "TEAM-ID"
+  "baseBranch": "main",
+  "defaultTeam": "TEAM-ID",
+  "startupScripts": [
+    "pnpm install",
+    "doppler setup -p yobr-staging -c dev_personal"
+  ]
 }
 ```
+
+### Startup Scripts
+
+Startup scripts run automatically when a new worktree is created. This is useful for:
+- Installing dependencies (`pnpm i`, `npm install`, `bun install`)
+- Setting up environment variables (`doppler setup -p project -c config`)
+- Running initialization scripts
+- Configuring local development tools
+
+Scripts are executed in order, in the worktree directory. If any script fails, the worktree creation will be aborted.
 
 API keys are stored securely in your system's configuration directory using [conf](https://github.com/sindresorhus/conf).
 

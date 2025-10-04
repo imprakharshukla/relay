@@ -126,7 +126,8 @@ export const Create: React.FC<CreateProps> = ({ task, teamKey }) => {
         config.repoBase,
         config.worktreeBase,
         branch,
-        config.baseBranch || 'main'
+        config.baseBranch || 'main',
+        config.startupScripts
       );
 
       // Step 7: Open editor
