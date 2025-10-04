@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/imprakharshukla/relay/compare/v1.0.0...v1.0.1) (2025-10-04)
+
+### Bug Fixes
+
+* add ms dependency for build ([1a61ab0](https://github.com/imprakharshukla/relay/commit/1a61ab0d29ce91cd4e0491f1bf101fa19df8764d))
+
 ## 1.0.0 (2025-10-04)
 
 ### Features
