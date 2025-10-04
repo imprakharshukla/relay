@@ -1,0 +1,29 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build output
+dist
+*.tsbuildinfo
+
+# Bun
+bun.lockb
+.bun
+
+# Environment
+.env
+.env.local
+
+# Config
+.relay/
+
+# OS
+.DS_Store
+*.log
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo

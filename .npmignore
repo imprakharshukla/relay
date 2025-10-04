@@ -1,0 +1,30 @@
+# Source files
+src/
+
+# Development files
+tsconfig.json
+tsdown.config.ts
+.DS_Store
+*.log
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Bun
+bun.lockb
+.bun
+
+# Tests
+test/
+*.test.ts
+*.spec.ts
+
+# Documentation (optional - remove if you want to include)
+CONTRIBUTING.md

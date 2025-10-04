@@ -1,0 +1,6 @@
+{
+  "repoBase": "/path/to/your/git/repository",
+  "editor": "cursor",
+  "worktreeBase": "../worktrees",
+  "defaultTeam": "TEAM-ID-OPTIONAL"
+}
