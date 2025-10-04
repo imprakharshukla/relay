@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/imprakharshukla/relay/compare/v1.2.0...v1.3.0) (2025-10-04)
+
+### Features
+
+* add startup scripts support for worktree initialization ([5a67edf](https://github.com/imprakharshukla/relay/commit/5a67edf5a874616403f5b620e56d738847e8be81))
+
 ## [1.2.0](https://github.com/imprakharshukla/relay/compare/v1.1.0...v1.2.0) (2025-10-04)
 
 ### Features
