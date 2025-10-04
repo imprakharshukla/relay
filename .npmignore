@@ -4,12 +4,14 @@ src/
 # Development files
 tsconfig.json
 tsdown.config.ts
+.releaserc.json
 .DS_Store
 *.log
 
 # Git
 .git
 .gitignore
+.github
 
 # IDE
 .vscode
