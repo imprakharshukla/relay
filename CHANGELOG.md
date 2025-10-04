@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/imprakharshukla/relay/compare/v1.0.1...v1.1.0) (2025-10-04)
+
+### Features
+
+* auto-assign issues to current user and remove AI-generated descriptions ([61292c0](https://github.com/imprakharshukla/relay/commit/61292c07c7ee087fd86de28c34403c633ac4d9dd))
+
 ## [1.0.1](https://github.com/imprakharshukla/relay/compare/v1.0.0...v1.0.1) (2025-10-04)
 
 ### Bug Fixes
