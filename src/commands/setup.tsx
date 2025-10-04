@@ -9,7 +9,7 @@ import { LinearService } from '../services/linear.js';
 import { validatePath, validateApiKey, isGitRepository } from '../utils/validation.js';
 import type { Editor } from '../types/index.js';
 
-type SetupStep = 'openrouter' | 'linear' | 'repoBase' | 'editor' | 'worktreeBase' | 'testing' | 'complete';
+type SetupStep = 'openrouter' | 'linear' | 'repoBase' | 'baseBranch' | 'worktreeBase' | 'editor' | 'testing' | 'complete';
 
 const editorOptions = [
   { label: 'VS Code', value: 'vscode' },
@@ -23,6 +23,7 @@ export const Setup: React.FC = () => {
   const [openRouterKey, setOpenRouterKeyState] = useState('');
   const [linearKey, setLinearKeyState] = useState('');
   const [repoBase, setRepoBase] = useState(process.cwd());
+  const [baseBranch, setBaseBranch] = useState('main');
   const [worktreeBase, setWorktreeBase] = useState('../worktrees');
   const [selectedEditor, setSelectedEditor] = useState<Editor>('cursor');
   const [error, setError] = useState('');
@@ -86,6 +87,10 @@ export const Setup: React.FC = () => {
           setError('Not a git repository. Please enter a valid git repository path.');
           return;
         }
+        setStep('baseBranch');
+        break;
+
+      case 'baseBranch':
         setStep('worktreeBase');
         break;
 
@@ -98,7 +103,8 @@ export const Setup: React.FC = () => {
         saveConfig({
           repoBase,
           editor: selectedEditor,
-          worktreeBase
+          worktreeBase,
+          baseBranch
         }, repoBase);
         setStep('complete');
         setTimeout(() => exit(), 2000);
@@ -182,6 +188,25 @@ export const Setup: React.FC = () => {
               onChange={setRepoBase}
               onSubmit={handleSubmit}
               placeholder={process.cwd()}
+            />
+          </Box>
+        </Box>
+      )}
+
+      {step === 'baseBranch' && (
+        <Box flexDirection="column">
+          <Text>Base branch for worktrees:</Text>
+          <Text dimColor>(Press Enter to use default, or type a different branch)</Text>
+          <Box marginTop={1}>
+            <Text color="cyan">{baseBranch}</Text>
+          </Box>
+          <Box marginTop={1}>
+            <Text>Branch: </Text>
+            <TextInput
+              value={baseBranch}
+              onChange={setBaseBranch}
+              onSubmit={handleSubmit}
+              placeholder="main"
             />
           </Box>
         </Box>

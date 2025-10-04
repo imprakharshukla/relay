@@ -125,7 +125,8 @@ export const Create: React.FC<CreateProps> = ({ task, teamKey }) => {
       const worktreePath = await createWorktree(
         config.repoBase,
         config.worktreeBase,
-        branch
+        branch,
+        config.baseBranch || 'main'
       );
 
       // Step 7: Open editor

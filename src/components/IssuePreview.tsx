@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Text } from 'ink';
+import Markdown from 'ink-markdown';
 import type { AIGeneratedIssue } from '../types/index.js';
 
 interface IssuePreviewProps {
@@ -24,13 +25,13 @@ export const IssuePreview: React.FC<IssuePreviewProps> = ({
       </Box>
 
       <Box flexDirection="column" marginBottom={1}>
-        <Text bold>Title:</Text>
+        <Text bold color="cyan">Title:</Text>
         <Text>{issue.title}</Text>
       </Box>
 
       <Box flexDirection="column" marginBottom={1}>
-        <Text bold>Description:</Text>
-        <Text>{issue.description}</Text>
+        <Text bold color="cyan">Description:</Text>
+        <Markdown>{issue.description}</Markdown>
       </Box>
 
       {projectName && (

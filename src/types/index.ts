@@ -3,6 +3,7 @@ export interface RelayConfig {
   editor: 'vscode' | 'cursor' | 'zed';
   defaultTeam?: string;
   worktreeBase: string;
+  baseBranch: string;
 }
 
 export interface AIGeneratedIssue {

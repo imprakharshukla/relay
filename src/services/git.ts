@@ -5,18 +5,30 @@ import { existsSync } from 'fs';
 export const createWorktree = async (
   repoBase: string,
   worktreeBase: string,
-  branchName: string
+  branchName: string,
+  baseBranch: string = 'main'
 ): Promise<string> => {
   // Ensure repo base exists and is a git repo
   if (!existsSync(resolve(repoBase, '.git'))) {
     throw new Error(`${repoBase} is not a git repository`);
   }
 
+  // Check if repository has any commits
+  try {
+    await execa('git', ['rev-parse', 'HEAD'], { cwd: repoBase });
+  } catch {
+    throw new Error(
+      'Git repository has no commits. Please make an initial commit first:\n' +
+      '  git add .\n' +
+      '  git commit -m "Initial commit"'
+    );
+  }
+
   const worktreePath = resolve(repoBase, worktreeBase, branchName);
 
   try {
-    // Create worktree with new branch
-    await execa('git', ['worktree', 'add', worktreePath, '-b', branchName], {
+    // Create worktree with new branch based on baseBranch
+    await execa('git', ['worktree', 'add', worktreePath, '-b', branchName, baseBranch], {
       cwd: repoBase
     });
 
@@ -24,6 +36,9 @@ export const createWorktree = async (
   } catch (error: any) {
     if (error.message?.includes('already exists')) {
       throw new Error(`Branch ${branchName} already exists`);
+    }
+    if (error.message?.includes('invalid reference')) {
+      throw new Error(`Base branch '${baseBranch}' does not exist. Please check your config.`);
     }
     throw new Error(`Failed to create worktree: ${error.message}`);
   }

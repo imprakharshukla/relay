@@ -69,7 +69,12 @@ export const ensureConfig = async (): Promise<RelayConfig | null> => {
 
   while (currentDir !== root) {
     if (configExists(currentDir)) {
-      return loadConfig(currentDir);
+      const config = loadConfig(currentDir);
+      // Ensure baseBranch exists (for backwards compatibility)
+      if (config && !config.baseBranch) {
+        config.baseBranch = 'main';
+      }
+      return config;
     }
     currentDir = dirname(currentDir);
   }
