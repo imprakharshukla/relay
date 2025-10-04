@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/imprakharshukla/relay/compare/v1.1.0...v1.2.0) (2025-10-04)
+
+### Features
+
+* support opening existing issues by ID (e.g., relay ENG-123) ([9a322dc](https://github.com/imprakharshukla/relay/commit/9a322dca7f2d4f1d341bad809a384ae39d425bfc))
+
 ## [1.1.0](https://github.com/imprakharshukla/relay/compare/v1.0.1...v1.1.0) (2025-10-04)
 
 ### Features
