@@ -72,9 +72,22 @@ Relay will:
 4. Set up a git worktree
 5. Open your editor in the worktree
 
-### 3. Advanced Usage
+### 3. Open an Existing Issue
 
-Specify a team:
+Open and work on an existing Linear issue by its ID:
+
+```bash
+relay ENG-123
+```
+
+Relay will:
+1. Fetch the issue from Linear
+2. Create a worktree (or use existing one) with the Linear branch name
+3. Open your editor in the worktree
+
+### 4. Advanced Usage
+
+Specify a team when creating issues:
 
 ```bash
 relay "add authentication" --team ENG
@@ -85,9 +98,12 @@ relay "add authentication" --team ENG
 ### Main Commands
 
 ```bash
-# Create an issue (default command)
+# Create an issue from task description
 relay "your task description"
 relay "your task" --team TEAMKEY
+
+# Open an existing issue by ID
+relay ENG-123
 
 # Interactive setup
 relay setup

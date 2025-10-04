@@ -4,6 +4,7 @@ import { render } from 'ink';
 import { Command } from 'commander';
 import { Setup } from './commands/setup.js';
 import { Create } from './commands/create.js';
+import { Open } from './commands/open.js';
 import { PR } from './commands/pr.js';
 import { Switch } from './commands/switch.js';
 import { Commit } from './commands/commit.js';
@@ -51,12 +52,13 @@ program
 
 // Create issue command (default)
 program
-  .argument('[task]', 'Task description')
+  .argument('[task]', 'Task description or issue ID (e.g., ENG-123)')
   .option('-t, --team <key>', 'Team key (e.g., ENG)')
   .action((task, options) => {
     if (!task) {
-      console.error('Error: Please provide a task description');
+      console.error('Error: Please provide a task description or issue ID');
       console.log('Usage: relay "your task description"');
+      console.log('   or: relay ENG-123  (to open existing issue)');
       console.log('   or: relay setup  (to configure)');
       process.exit(1);
     }
@@ -72,7 +74,15 @@ program
       process.exit(1);
     }
 
-    render(<Create task={task} teamKey={options.team} />);
+    // Check if input looks like an issue ID (e.g., ENG-123, TEAM-456)
+    const issueIdPattern = /^[A-Z]+-\d+$/i;
+    if (issueIdPattern.test(task)) {
+      // Open existing issue
+      render(<Open issueId={task.toUpperCase()} />);
+    } else {
+      // Create new issue
+      render(<Create task={task} teamKey={options.team} />);
+    }
   });
 
 // Auth commands
