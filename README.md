@@ -21,20 +21,20 @@ Relay is a powerful CLI tool that streamlines your development workflow by combi
 ### Using Bun (Recommended)
 
 ```bash
-bun add -g relay-cli
+bun add -g relay-one
 ```
 
 ### Using npm
 
 ```bash
-npm install -g relay-cli
+npm install -g relay-one
 ```
 
 ### From Source
 
 ```bash
-git clone https://github.com/yourusername/relay-cli.git
-cd relay-cli
+git clone https://github.com/imprakharshukla/relay.git
+cd relay
 bun install
 bun run build
 bun link
@@ -211,7 +211,7 @@ Configuration is stored in `.relay/relay-config.json` at your repository root:
 
 API keys are stored securely in your system's configuration directory using [conf](https://github.com/sindresorhus/conf).
 
-## 🛠️ Development
+## Development
 
 ### Prerequisites
 
@@ -223,8 +223,8 @@ API keys are stored securely in your system's configuration directory using [con
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/relay-cli.git
-cd relay-cli
+git clone https://github.com/imprakharshukla/relay.git
+cd relay
 
 # Install dependencies
 bun install
@@ -270,7 +270,7 @@ relay-cli/
 └── tsdown.config.ts
 ```
 
-## 🔑 API Keys
+## API Keys
 
 ### OpenRouter
 
@@ -286,7 +286,7 @@ relay-cli/
 2. Create a new Personal API Key
 3. Copy the key (starts with `lin_api_`)
 
-## 🎯 Roadmap
+## Roadmap
 
 - [ ] **Batch Issue Creation**: Create multiple related issues from one description
 - [ ] **Issue Templates**: Define custom templates for different issue types
@@ -297,7 +297,7 @@ relay-cli/
 - [ ] **Issue Linking**: Auto-link related issues
 - [ ] **Worktree Cleanup**: Interactive cleanup of old worktrees
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -314,12 +314,12 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - Linear integration via [@linear/sdk](https://github.com/linear/linear)
 - Fast builds with [tsdown](https://github.com/sxzz/tsdown)
 
-## 💬 Support
+## Support
 
-- 🐛 [Report a bug](https://github.com/yourusername/relay-cli/issues)
-- 💡 [Request a feature](https://github.com/yourusername/relay-cli/issues)
-- 📖 [Documentation](https://github.com/yourusername/relay-cli#readme)
+- [Report a bug](https://github.com/imprakharshukla/relay/issues)
+- [Request a feature](https://github.com/imprakharshukla/relay/issues)
+- [Documentation](https://github.com/imprakharshukla/relay#readme)
 
 ---
 
-Made with ❤️ and ☕ by prakhar
+Made by Prakhar Shukla
