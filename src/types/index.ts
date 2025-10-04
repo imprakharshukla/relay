@@ -8,11 +8,9 @@ export interface RelayConfig {
 
 export interface AIGeneratedIssue {
   title: string;
-  description: string;
   projectId?: string;
   labelIds: string[];
   priority: 0 | 1 | 2 | 3 | 4;
-  assigneeId?: string;
 }
 
 export interface LinearContext {

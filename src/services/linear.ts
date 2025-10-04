@@ -66,14 +66,16 @@ export class LinearService {
     issue: AIGeneratedIssue
   ): Promise<Issue> {
     try {
+      // Get current user ID
+      const me = await this.client.viewer;
+
       const issuePayload = await this.client.createIssue({
         teamId,
         title: issue.title,
-        description: issue.description,
         priority: issue.priority,
         projectId: issue.projectId,
         labelIds: issue.labelIds,
-        assigneeId: issue.assigneeId
+        assigneeId: me.id
       });
 
       const createdIssue = await issuePayload.issue;

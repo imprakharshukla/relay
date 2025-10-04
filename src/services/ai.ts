@@ -5,11 +5,6 @@ import type { LinearContext, AIGeneratedIssue } from "../types/index.js";
 
 const IssueSchema = z.object({
   title: z.string().describe("Concise, action-oriented issue title"),
-  description: z
-    .string()
-    .describe(
-      "Comprehensive issue description with problem statement, acceptance criteria, and technical considerations",
-    ),
   projectId: z.string().optional().describe("ID of the best matching project"),
   labelIds: z.array(z.string()).describe("Array of 2-5 relevant label IDs"),
   priority: z
@@ -19,10 +14,6 @@ const IssueSchema = z.object({
     .describe(
       "Priority level: 0=No priority, 1=Urgent, 2=High, 3=Normal, 4=Low",
     ),
-  assigneeId: z
-    .string()
-    .optional()
-    .describe("ID of suggested assignee if obvious from context"),
 });
 
 export class AIService {
@@ -77,7 +68,7 @@ export class AIService {
       .map((t) => `- ${t.name} (${t.key}, ID: ${t.id})`)
       .join("\n");
 
-    return `You are an expert project manager analyzing a task to create a comprehensive Linear issue.
+    return `You are an expert project manager analyzing a task to create a Linear issue.
 
 Task: "${userInput}"
 
@@ -96,14 +87,8 @@ Instructions:
 1. Analyze the task and determine the best matching project based on the description
 2. Select 2-5 relevant labels that best categorize this task
 3. Create a concise, action-oriented title (50 chars max)
-4. Write a comprehensive description that includes:
-   - Clear problem statement or feature request
-   - Acceptance criteria (bullet points)
-   - Technical considerations or context
-   - Any potential edge cases or dependencies
-5. Suggest an appropriate priority level (3=Normal is default unless the task indicates urgency)
-6. Only suggest an assignee if it's absolutely obvious from the context
+4. Suggest an appropriate priority level (3=Normal is default unless the task indicates urgency)
 
-Make the issue as information-dense as possible to help developers understand the scope and requirements immediately.`;
+Keep the title clear and actionable.`;
   }
 }
