@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Text } from 'ink';
-import Markdown from 'ink-markdown';
 import type { AIGeneratedIssue } from '../types/index.js';
 
 interface IssuePreviewProps {
@@ -10,6 +9,53 @@ interface IssuePreviewProps {
 }
 
 const priorityLabels = ['No priority', 'Urgent', 'High', 'Normal', 'Low'];
+
+// Simple function to render markdown-like text with basic formatting
+const renderFormattedText = (text: string) => {
+  const lines = text.split('\n');
+
+  return lines.map((line, index) => {
+    // Headers
+    if (line.startsWith('### ')) {
+      return (
+        <Text key={index} bold color="cyan">
+          {line.replace('### ', '')}
+        </Text>
+      );
+    }
+    if (line.startsWith('## ')) {
+      return (
+        <Text key={index} bold color="green">
+          {line.replace('## ', '')}
+        </Text>
+      );
+    }
+    if (line.startsWith('# ')) {
+      return (
+        <Text key={index} bold color="blue">
+          {line.replace('# ', '')}
+        </Text>
+      );
+    }
+
+    // Bullet points
+    if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
+      return (
+        <Text key={index} dimColor>
+          {line}
+        </Text>
+      );
+    }
+
+    // Empty lines
+    if (line.trim() === '') {
+      return <Text key={index}> </Text>;
+    }
+
+    // Regular text
+    return <Text key={index}>{line}</Text>;
+  });
+};
 
 export const IssuePreview: React.FC<IssuePreviewProps> = ({
   issue,
@@ -31,7 +77,9 @@ export const IssuePreview: React.FC<IssuePreviewProps> = ({
 
       <Box flexDirection="column" marginBottom={1}>
         <Text bold color="cyan">Description:</Text>
-        <Markdown>{issue.description}</Markdown>
+        <Box flexDirection="column" paddingLeft={2}>
+          {renderFormattedText(issue.description)}
+        </Box>
       </Box>
 
       {projectName && (

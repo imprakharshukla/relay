@@ -33,7 +33,6 @@
     "conf": "^13.0.1",
     "execa": "^9.5.2",
     "ink": "^5.0.1",
-    "ink-markdown": "^1.0.4",
     "ink-select-input": "^6.0.0",
     "ink-spinner": "^5.0.0",
     "ink-text-input": "^6.0.0",
