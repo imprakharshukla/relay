@@ -1,6 +1,6 @@
 {
   "name": "relay-one",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "AI-powered Linear issue creation with automatic git worktree setup",
   "type": "module",
   "bin": {

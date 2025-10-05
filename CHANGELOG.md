@@ -1,3 +1,26 @@
+## [2.0.0](https://github.com/imprakharshukla/relay/compare/v1.4.0...v2.0.0) (2025-10-05)
+
+### ⚠ BREAKING CHANGES
+
+* CLI now requires Bun runtime to run
+
+- Replace better-sqlite3 with bun:sqlite to eliminate native binding issues
+- Update all database queries from db.prepare() to db.query()
+- Change shebang from node to bun
+- Add bun:sqlite to external dependencies in tsdown config
+- Remove better-sqlite3 and @types/better-sqlite3 from dependencies
+
+This fixes the "Could not locate the bindings file" error when installing
+the package globally with bun add -g relay-one.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+
+### Bug Fixes
+
+* replace better-sqlite3 with bun:sqlite for global package compatibility ([2038bfc](https://github.com/imprakharshukla/relay/commit/2038bfc77b836c5a42b39e862d4e43cf5bfe5088))
+
 ## [1.4.0](https://github.com/imprakharshukla/relay/compare/v1.3.0...v1.4.0) (2025-10-05)
 
 ### Features
