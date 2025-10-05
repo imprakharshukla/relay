@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/imprakharshukla/relay/compare/v1.3.0...v1.4.0) (2025-10-05)
+
+### Features
+
+* refactor to global repository management with SQLite database ([5d81ecc](https://github.com/imprakharshukla/relay/commit/5d81eccecfc7148659d69e758146c9670eae988c))
+
 ## [1.3.0](https://github.com/imprakharshukla/relay/compare/v1.2.0...v1.3.0) (2025-10-04)
 
 ### Features
