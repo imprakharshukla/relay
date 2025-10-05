@@ -2,148 +2,134 @@
 import React from 'react';
 import { render } from 'ink';
 import { Command } from 'commander';
-import { Setup } from './commands/setup.js';
-import { Create } from './commands/create.js';
-import { Open } from './commands/open.js';
-import { PR } from './commands/pr.js';
-import { Switch } from './commands/switch.js';
-import { Commit } from './commands/commit.js';
-import { hasRequiredKeys, setOpenRouterKey, setLinearKey, getOpenRouterKey, getLinearKey } from './utils/storage.js';
-import { loadConfig } from './services/config.js';
+import { RepoAdd } from './commands/repo-add.js';
+import { RepoList } from './commands/repo-list.js';
+import { RepoRemove } from './commands/repo-remove.js';
+import { RepoEdit } from './commands/repo-edit.js';
+import { CreateIssue } from './commands/create-issue.js';
+import { WorktreeList } from './commands/worktree-list.js';
+import { WorktreeOpen } from './commands/worktree-open.js';
+import { WorktreeCleanup } from './commands/worktree-cleanup.js';
+import { Config } from './commands/config.js';
 
 const program = new Command();
 
 program
   .name('relay')
   .description('AI-powered Linear issue creation with automatic git worktree setup')
-  .version('0.1.0');
+  .version('2.0.0');
 
-// Setup command
-program
-  .command('setup')
-  .description('Configure Relay CLI')
+// Repository management
+const repo = program.command('repo').description('Manage repositories');
+
+repo
+  .command('add')
+  .description('Add a new repository (includes first-time setup)')
   .action(() => {
-    render(<Setup />);
+    render(<RepoAdd />);
   });
 
-// PR command
-program
-  .command('pr')
-  .description('Create a pull request with AI-generated title and description')
+repo
+  .command('list')
+  .description('List all repositories')
   .action(() => {
-    render(<PR />);
+    render(<RepoList />);
   });
 
-// Switch command
-program
-  .command('switch')
-  .description('Interactively switch between your assigned Linear issues')
-  .action(() => {
-    render(<Switch />);
+repo
+  .command('remove <name>')
+  .description('Remove a repository')
+  .action((name) => {
+    render(<RepoRemove name={name} />);
   });
 
-// Commit command
-program
-  .command('commit')
-  .description('Create a commit with AI-generated conventional commit message')
-  .action(() => {
-    render(<Commit />);
+repo
+  .command('edit <name>')
+  .description('Edit repository settings')
+  .option('--editor <editor>', 'Set editor (cursor, vscode, zed)')
+  .option('--worktree-base <path>', 'Set worktree base path')
+  .action((name, options) => {
+    render(<RepoEdit name={name} editor={options.editor} worktreeBase={options.worktreeBase} />);
   });
 
-// Create issue command (default)
+// Create issue command (primary command)
 program
-  .argument('[task]', 'Task description or issue ID (e.g., ENG-123)')
-  .option('-t, --team <key>', 'Team key (e.g., ENG)')
+  .command('create <task>')
+  .description('Create a Linear issue with AI and set up worktree')
+  .option('-r, --repo <name>', 'Repository name')
   .action((task, options) => {
-    if (!task) {
-      console.error('Error: Please provide a task description or issue ID');
-      console.log('Usage: relay "your task description"');
-      console.log('   or: relay ENG-123  (to open existing issue)');
-      console.log('   or: relay setup  (to configure)');
-      process.exit(1);
-    }
-
-    if (!hasRequiredKeys()) {
-      console.error('Error: API keys not configured. Please run: relay setup');
-      process.exit(1);
-    }
-
-    const config = loadConfig();
-    if (!config) {
-      console.error('Error: No configuration found. Please run: relay setup');
-      process.exit(1);
-    }
-
-    // Check if input looks like an issue ID (e.g., ENG-123, TEAM-456)
-    const issueIdPattern = /^[A-Z]+-\d+$/i;
-    if (issueIdPattern.test(task)) {
-      // Open existing issue
-      render(<Open issueId={task.toUpperCase()} />);
-    } else {
-      // Create new issue
-      render(<Create task={task} teamKey={options.team} />);
-    }
+    render(<CreateIssue task={task} repoName={options.repo} />);
   });
 
-// Auth commands
-const auth = program.command('auth').description('Manage authentication');
-
-auth
-  .command('set-openrouter')
-  .description('Set OpenRouter API key')
-  .argument('<key>', 'OpenRouter API key')
-  .action((key) => {
-    setOpenRouterKey(key);
-    console.log('✓ OpenRouter API key saved');
+// Worktree management
+program
+  .command('list')
+  .description('List all worktrees')
+  .option('-r, --repo <name>', 'Filter by repository name')
+  .action((options) => {
+    render(<WorktreeList repoName={options.repo} />);
   });
 
-auth
-  .command('set-linear')
-  .description('Set Linear API key')
-  .argument('<key>', 'Linear API key')
-  .action((key) => {
-    setLinearKey(key);
-    console.log('✓ Linear API key saved');
+program
+  .command('open <issue>')
+  .description('Open a worktree by issue identifier (e.g., ENG-123)')
+  .action((issue) => {
+    render(<WorktreeOpen issueIdentifier={issue} />);
   });
 
-auth
-  .command('status')
-  .description('Check authentication status')
+program
+  .command('cleanup')
+  .description('Remove old worktrees interactively')
   .action(() => {
-    const openRouterKey = getOpenRouterKey();
-    const linearKey = getLinearKey();
-
-    console.log('Authentication Status:');
-    console.log(`  OpenRouter: ${openRouterKey ? '✓ Configured' : '✗ Not configured'}`);
-    console.log(`  Linear: ${linearKey ? '✓ Configured' : '✗ Not configured'}`);
+    render(<WorktreeCleanup />);
   });
 
-// Config commands
-const config = program.command('config').description('Manage configuration');
+// Configuration
+const configCmd = program.command('config').description('Manage configuration');
 
-config
+configCmd
   .command('show')
   .description('Show current configuration')
   .action(() => {
-    const cfg = loadConfig();
-    if (!cfg) {
-      console.log('No configuration found. Run: relay setup');
-      return;
-    }
+    render(<Config type="show" />);
+  });
 
-    console.log('Current Configuration:');
-    console.log(`  Repo Base: ${cfg.repoBase}`);
-    console.log(`  Base Branch: ${cfg.baseBranch}`);
-    console.log(`  Worktree Base: ${cfg.worktreeBase}`);
-    console.log(`  Editor: ${cfg.editor}`);
-    if (cfg.defaultTeam) {
-      console.log(`  Default Team: ${cfg.defaultTeam}`);
+configCmd
+  .command('set-key <key> <value>')
+  .description('Set API key (openrouter or linear)')
+  .action((key, value) => {
+    if (key !== 'openrouter' && key !== 'linear') {
+      console.error('Error: key must be "openrouter" or "linear"');
+      process.exit(1);
     }
-    if (cfg.startupScripts && cfg.startupScripts.length > 0) {
-      console.log(`  Startup Scripts:`);
-      cfg.startupScripts.forEach((script, i) => {
-        console.log(`    ${i + 1}. ${script}`);
-      });
+    render(<Config type="set-key" key={key as 'openrouter' | 'linear'} value={value} />);
+  });
+
+configCmd
+  .command('set-editor <editor>')
+  .description('Set default editor (cursor, vscode, zed)')
+  .action((editor) => {
+    render(<Config type="set-editor" editor={editor} />);
+  });
+
+// Default action: relay "task" or relay ENG-123
+program
+  .argument('[task]', 'Task description or issue ID (e.g., ENG-123)')
+  .option('-r, --repo <name>', 'Repository name')
+  .action((task, options) => {
+    if (!task) {
+      // No arguments, show help
+      program.help();
+    } else {
+      // Check if input looks like an issue ID (e.g., ENG-123, TEAM-456)
+      const issueIdPattern = /^[A-Z]+-\d+$/i;
+      if (issueIdPattern.test(task)) {
+        // Open existing issue
+        render(<WorktreeOpen issueIdentifier={task.toUpperCase()} />);
+      } else {
+        // Create new issue
+        render(<CreateIssue task={task} repoName={options.repo} />);
+      }
     }
   });
 

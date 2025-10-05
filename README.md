@@ -1,22 +1,21 @@
-# Relay CLI
+# Relay CLI 🚀
 
 > AI-powered Linear issue creation with automatic git worktree setup
 
-Relay is a powerful CLI tool that streamlines your development workflow by combining AI-assisted issue creation, Linear integration, and automatic git worktree management. Just describe your task in natural language, and Relay handles the rest.
+Relay is a powerful CLI tool that streamlines your development workflow by combining AI-assisted issue creation, Linear integration, and automatic git worktree management. Manage multiple repositories globally from one central database.
 
-## Features
+## ✨ Features
 
-- **AI-Powered Issue Generation**: Uses Grok-4 via OpenRouter to analyze your task and create comprehensive Linear issues
-- **Smart Context Awareness**: Automatically selects the right project, labels, and priority based on your task description
-- **Automatic Git Worktrees**: Creates isolated worktrees for each issue with the Linear-generated branch name
-- **Interactive Issue Switcher**: Quickly switch between your assigned Linear issues with worktree management
-- **Smart Commit Messages**: AI-generated conventional commit messages with co-author detection
-- **AI-Powered PR Creation**: Generate comprehensive pull requests with auto-linked Linear issues
-- **Editor Integration**: Automatically opens your preferred editor (VS Code, Cursor, or Zed)
-- **Built with Bun**: Lightning-fast startup and execution
-- **Beautiful CLI UI**: Interactive setup and real-time feedback with Ink
+- 🤖 **AI-Powered Issue Generation**: Uses Grok-4-fast via OpenRouter to analyze your task and create comprehensive Linear issues
+- 🗄️ **Global Repository Management**: Centralized SQLite database tracks all your repos and worktrees
+- 📋 **Smart Context Awareness**: Automatically selects the right project, labels, and priority
+- 🌳 **Automatic Git Worktrees**: Creates isolated worktrees for each issue with Linear-generated branch names
+- 💻 **Editor Integration**: Automatically opens your preferred editor (VS Code, Cursor, or Zed)
+- ⚡ **Built with Bun**: Lightning-fast startup and execution
+- 🎨 **Beautiful CLI UI**: Interactive setup and real-time feedback with Ink
+- 🌍 **Work from Anywhere**: No per-directory config needed - manage everything globally
 
-## Installation
+## 📦 Installation
 
 ### Using Bun (Recommended)
 
@@ -40,105 +39,104 @@ bun run build
 bun link
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
-### 1. Setup
-
-Run the interactive setup wizard:
+### 1. Add Your First Repository
 
 ```bash
-relay setup
+cd ~/Code/my-app
+relay repo add
 ```
 
-You'll be prompted for:
-- **OpenRouter API Key**: Get one at [openrouter.ai](https://openrouter.ai/)
-- **Linear API Key**: Get one at [linear.app/settings/api](https://linear.app/settings/api)
-- **Git Repository Path**: Your project's base directory
-- **Worktree Base Path**: Where to create worktrees (e.g., `../worktrees`)
-- **Preferred Editor**: Choose between VS Code, Cursor, or Zed
+**First time setup includes:**
+- OpenRouter API Key (get one at [openrouter.ai](https://openrouter.ai/))
+- Linear API Key (get one at [linear.app/settings/api](https://linear.app/settings/api))
+- Default editor preference
+- Auto-detects your Linear team
+
+**Adds repository with:**
+- Repository name (auto-suggests from folder)
+- Git repository path
+- Worktree base directory
 
 ### 2. Create an Issue
 
-Simply describe your task:
+From anywhere on your machine:
 
 ```bash
-relay "fixing component library button styling"
+relay "fix button styling"
+# or
+relay create "fix button styling"
 ```
 
-Relay will:
-1. Analyze your task with AI
-2. Select the appropriate project and labels
-3. Create a detailed Linear issue
-4. Set up a git worktree
-5. Open your editor in the worktree
+**Relay will:**
+1. ✅ Let you select a repository (if you have multiple)
+2. 📊 Fetch Linear context (projects, labels, teams)
+3. 🤖 AI analyzes your task
+4. 📝 Create detailed Linear issue
+5. 🌲 Set up git worktree
+6. 🚀 Open your editor
 
 ### 3. Open an Existing Issue
 
-Open and work on an existing Linear issue by its ID:
-
 ```bash
 relay ENG-123
+# or
+relay open ENG-123
 ```
 
-Relay will:
-1. Fetch the issue from Linear
-2. Create a worktree (or use existing one) with the Linear branch name
-3. Open your editor in the worktree
+Opens the worktree for an existing Linear issue instantly.
 
-### 4. Advanced Usage
+## 📚 Commands
 
-Specify a team when creating issues:
+### Repository Management
 
 ```bash
-relay "add authentication" --team ENG
+# Add a repository (includes first-time setup)
+relay repo add
+
+# List all repositories
+relay repo list
+
+# Edit repository settings
+relay repo edit my-app --editor cursor
+relay repo edit my-app --worktree-base ../worktrees
+
+# Remove a repository
+relay repo remove my-app
 ```
 
-## Commands
-
-### Main Commands
+### Issue Creation
 
 ```bash
-# Create an issue from task description
-relay "your task description"
-relay "your task" --team TEAMKEY
+# Create issue (selects repo interactively if multiple)
+relay "add dark mode"
+relay create "add dark mode"
 
-# Open an existing issue by ID
+# Specify repository
+relay create "add dark mode" -r my-app
+relay create "add dark mode" --repo my-app
+
+# Open existing issue by ID
 relay ENG-123
-
-# Interactive setup
-relay setup
-
-# Show version
-relay --version
-
-# Show help
-relay --help
+relay open ENG-123
 ```
 
-### Workflow Commands
+### Worktree Management
 
 ```bash
-# Switch between assigned issues
-relay switch
+# List all worktrees across all repos
+relay list
 
-# Create a pull request with AI-generated content
-relay pr
+# List worktrees for specific repo
+relay list -r my-app
+relay list --repo my-app
 
-# Create a commit with AI-generated conventional commit message
-relay commit
-```
+# Open a worktree by issue ID
+relay open ENG-123
 
-### Authentication
-
-```bash
-# Set OpenRouter API key
-relay auth set-openrouter sk-or-...
-
-# Set Linear API key
-relay auth set-linear lin_api_...
-
-# Check auth status
-relay auth status
+# Clean up old worktrees interactively
+relay cleanup
 ```
 
 ### Configuration
@@ -146,189 +144,103 @@ relay auth status
 ```bash
 # Show current configuration
 relay config show
+
+# Update API keys
+relay config set-key openrouter sk-or-...
+relay config set-key linear lin_api_...
+
+# Change default editor
+relay config set-editor cursor
+relay config set-editor vscode
+relay config set-editor zed
 ```
 
-## How It Works
+## 🏗️ How It Works
 
-1. **Context Gathering**: Relay fetches all available teams, projects, and labels from your Linear workspace
+### Global Architecture
 
-2. **AI Analysis**: Using Grok-4-fast (or your chosen model), Relay analyzes your task description and generates:
-   - A concise, action-oriented title
-   - Comprehensive description with acceptance criteria
-   - Best matching project
-   - Relevant labels (2-5)
-   - Appropriate priority level
+Relay uses a **centralized SQLite database** (`~/.relay/relay.db`) to manage:
+- All your repositories
+- Active worktrees across all repos
+- API keys and global settings
 
-3. **Issue Creation**: The AI-generated issue is created in Linear with all metadata
+**No more per-directory configs!** Everything is managed globally.
 
-4. **Worktree Setup**: A new git worktree is created using Linear's branch name format
-
-5. **Editor Launch**: Your configured editor opens automatically in the new worktree
-
-## Workflow Commands
-
-### Switch Between Issues
+### Workflow Example
 
 ```bash
-relay switch
+# Day 1: Setup
+cd ~/Code/my-app
+relay repo add
+# → Sets up API keys, adds my-app
+
+# Day 2: Add another repo
+cd ~/Code/another-project
+relay repo add
+# → Quick add (API keys already configured)
+
+# Day 3: Work from anywhere
+cd ~/Downloads
+relay "fix login bug"
+# → Select repo: my-app
+# → Creates issue ENG-123
+# → Sets up worktree
+# → Opens Cursor
+
+relay list
+# → See all your worktrees across all repos
+
+relay open ENG-123
+# → Opens that worktree instantly
 ```
 
-Interactively switch between your assigned Linear issues:
-- Fetches all issues assigned to you
-- Displays them in an interactive list
-- Checks if a worktree already exists for the selected issue
-- Creates a new worktree if needed or switches to the existing one
-- Opens your configured editor in the worktree
+## ⚙️ Configuration
 
-Perfect for quickly jumping between multiple tasks!
+### Global Database
 
-### Create Pull Requests
+All data stored in `~/.relay/relay.db`:
+- API keys (OpenRouter, Linear)
+- Default editor preference
+- Repository configurations
+- Worktree tracking
 
+### Per-Repository Settings
+
+Each repository can have:
+- Custom editor (overrides global)
+- Custom worktree base path
+- Repository-specific metadata
+
+Edit with:
 ```bash
-relay pr
+relay repo edit <name> --editor cursor
 ```
 
-AI-powered pull request creation:
-- Analyzes all commits on your current branch
-- Generates a comprehensive PR title and description
-- Automatically links the Linear issue from your branch name
-- Suggests reviewers based on file history
-- Creates the PR via GitHub CLI
+## 🎯 Advanced Features
 
-Requires [GitHub CLI](https://cli.github.com/) to be installed and authenticated.
+### AI Model Configuration
 
-### Smart Commits
+The CLI uses `x-ai/grok-4-fast` by default. To use a different model, edit `src/services/ai.ts`:
 
+```typescript
+constructor(apiKey: string, model: string = 'x-ai/grok-4-fast') {
+```
+
+### Custom Worktree Paths
+
+Per-repository worktree configuration:
 ```bash
-relay commit
+relay repo edit my-app --worktree-base ~/worktrees
 ```
 
-AI-generated conventional commit messages:
-- Analyzes your staged changes
-- Generates a conventional commit message (feat, fix, refactor, etc.)
-- Automatically detects co-authors from file history
-- Links the Linear issue from your branch name
-- Shows a preview before committing
+### Multiple Repositories
 
-Make sure to stage your changes with `git add` before running this command.
+Relay is designed for managing multiple projects:
+- Each repo has its own settings
+- Worktrees are tracked per-repo
+- Global view of all work across projects
 
-## Configuration
-
-Configuration is stored in `.relay/relay-config.json` at your repository root:
-
-```json
-{
-  "repoBase": "/path/to/your/repo",
-  "editor": "cursor",
-  "worktreeBase": "../worktrees",
-  "baseBranch": "main",
-  "defaultTeam": "TEAM-ID",
-  "startupScripts": [
-    "pnpm install",
-    "doppler setup -p yobr-staging -c dev_personal"
-  ]
-}
-```
-
-### Startup Scripts
-
-Startup scripts run automatically when a new worktree is created. This is useful for:
-- Installing dependencies (`pnpm i`, `npm install`, `bun install`)
-- Setting up environment variables (`doppler setup -p project -c config`)
-- Running initialization scripts
-- Configuring local development tools
-
-Scripts are executed in order, in the worktree directory. If any script fails, the worktree creation will be aborted.
-
-API keys are stored securely in your system's configuration directory using [conf](https://github.com/sindresorhus/conf).
-
-## Development
-
-### Prerequisites
-
-- [Bun](https://bun.sh) v1.0+
-- Node.js v18+ (for compatibility)
-- Git 2.5+ (for worktree support)
-
-### Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/imprakharshukla/relay.git
-cd relay
-
-# Install dependencies
-bun install
-
-# Run in development mode
-bun run dev
-
-# Build
-bun run build
-
-# Link locally
-bun link
-```
-
-### Project Structure
-
-```
-relay-cli/
-├── src/
-│   ├── commands/          # Command implementations
-│   │   ├── create.tsx     # Issue creation flow
-│   │   ├── setup.tsx      # Setup wizard
-│   │   ├── pr.tsx         # PR creation
-│   │   ├── switch.tsx     # Issue switcher
-│   │   └── commit.tsx     # Smart commits
-│   ├── components/        # Ink UI components
-│   │   ├── Spinner.tsx
-│   │   └── IssuePreview.tsx
-│   ├── services/          # Core services
-│   │   ├── ai.ts          # OpenRouter/AI integration
-│   │   ├── linear.ts      # Linear API wrapper
-│   │   ├── git.ts         # Git worktree operations
-│   │   ├── pr.ts          # PR generation
-│   │   ├── config.ts      # Config management
-│   │   └── editor.ts      # Editor launcher
-│   ├── utils/             # Utilities
-│   │   ├── storage.ts     # Secure key storage
-│   │   └── validation.ts  # Input validation
-│   ├── types/             # TypeScript types
-│   └── cli.tsx            # CLI entry point
-├── package.json
-├── tsconfig.json
-└── tsdown.config.ts
-```
-
-## API Keys
-
-### OpenRouter
-
-1. Visit [openrouter.ai](https://openrouter.ai/)
-2. Sign up or log in
-3. Go to API Keys section
-4. Create a new key
-5. Add credits to your account
-
-### Linear
-
-1. Go to [linear.app/settings/api](https://linear.app/settings/api)
-2. Create a new Personal API Key
-3. Copy the key (starts with `lin_api_`)
-
-## Roadmap
-
-- [ ] **Batch Issue Creation**: Create multiple related issues from one description
-- [ ] **Issue Templates**: Define custom templates for different issue types
-- [ ] **AI Chat Mode**: Interactive chat for refining issues
-- [ ] **Time Tracking**: Auto-start Linear time tracking
-- [ ] **Analytics**: View your productivity metrics
-- [ ] **Custom AI Models**: Support for different LLMs
-- [ ] **Issue Linking**: Auto-link related issues
-- [ ] **Worktree Cleanup**: Interactive cleanup of old worktrees
-
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -338,19 +250,24 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## Acknowledgments
+## 📝 License
+
+MIT © Prakhar Shukla
+
+## 🙏 Acknowledgments
 
 - Built with [Ink](https://github.com/vadimdemedes/ink) for beautiful CLI UIs
 - Powered by [Vercel AI SDK](https://github.com/vercel/ai) and [OpenRouter](https://openrouter.ai/)
 - Linear integration via [@linear/sdk](https://github.com/linear/linear)
 - Fast builds with [tsdown](https://github.com/sxzz/tsdown)
+- Database with [better-sqlite3](https://github.com/WiseLibs/better-sqlite3)
 
-## Support
+## 💬 Support
 
-- [Report a bug](https://github.com/imprakharshukla/relay/issues)
-- [Request a feature](https://github.com/imprakharshukla/relay/issues)
-- [Documentation](https://github.com/imprakharshukla/relay#readme)
+- 🐛 [Report a bug](https://github.com/imprakharshukla/relay/issues)
+- 💡 [Request a feature](https://github.com/imprakharshukla/relay/issues)
+- 📖 [Documentation](https://github.com/imprakharshukla/relay#readme)
 
 ---
 
-Made by Prakhar Shukla
+Made with ❤️ using Bun and TypeScript
