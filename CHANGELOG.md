@@ -1,3 +1,31 @@
+## [3.0.0](https://github.com/imprakharshukla/relay/compare/v2.0.0...v3.0.0) (2025-10-05)
+
+### ⚠ BREAKING CHANGES
+
+* Database queries now use Drizzle ORM
+
+Changes:
+- Add Drizzle ORM and better-sqlite3 dependencies
+- Create Drizzle schema with type-safe table definitions
+- Update all database queries to use Drizzle ORM syntax
+- Change shebang back to #!/usr/bin/env node
+- Update field names to camelCase (worktreeBase, repoId, etc.)
+- Add better-sqlite3 and drizzle-orm to external dependencies
+
+Benefits:
+- Works with both Node.js and Bun runtimes
+- Type-safe database queries with IntelliSense
+- Better developer experience with Drizzle ORM
+- Eliminates Bun-specific dependencies
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+
+### Features
+
+* migrate to Drizzle ORM for cross-runtime compatibility ([c07860f](https://github.com/imprakharshukla/relay/commit/c07860fe68b9c6151fa8d32e9ef8d790c2cf841d))
+
 ## [2.0.0](https://github.com/imprakharshukla/relay/compare/v1.4.0...v2.0.0) (2025-10-05)
 
 ### ⚠ BREAKING CHANGES
