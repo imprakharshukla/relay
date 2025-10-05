@@ -2,6 +2,9 @@
 import React from 'react';
 import { render } from 'ink';
 import { Command } from 'commander';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import { RepoAdd } from './commands/repo-add.js';
 import { RepoList } from './commands/repo-list.js';
 import { RepoRemove } from './commands/repo-remove.js';
@@ -12,12 +15,16 @@ import { WorktreeOpen } from './commands/worktree-open.js';
 import { WorktreeCleanup } from './commands/worktree-cleanup.js';
 import { Config } from './commands/config.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const packageJson = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8'));
+
 const program = new Command();
 
 program
   .name('relay')
   .description('AI-powered Linear issue creation with automatic git worktree setup')
-  .version('2.0.0');
+  .version(packageJson.version);
 
 // Repository management
 const repo = program.command('repo').description('Manage repositories');
