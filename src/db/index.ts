@@ -1,4 +1,4 @@
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import { homedir } from 'os';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
@@ -15,7 +15,7 @@ if (!existsSync(DB_DIR)) {
 export const db = new Database(DB_PATH);
 
 // Enable foreign keys
-db.pragma('foreign_keys = ON');
+db.exec('PRAGMA foreign_keys = ON');
 
 // Initialize database schema
 export function initializeDatabase() {

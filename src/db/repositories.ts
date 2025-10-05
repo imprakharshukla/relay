@@ -17,7 +17,7 @@ export interface CreateRepositoryInput {
 }
 
 export function createRepository(input: CreateRepositoryInput): Repository {
-  const stmt = db.prepare(`
+  const stmt = db.query(`
     INSERT INTO repositories (name, path, worktree_base, editor)
     VALUES (?, ?, ?, ?)
   `);
@@ -33,22 +33,22 @@ export function createRepository(input: CreateRepositoryInput): Repository {
 }
 
 export function getRepositoryById(id: number): Repository | null {
-  const stmt = db.prepare('SELECT * FROM repositories WHERE id = ?');
+  const stmt = db.query('SELECT * FROM repositories WHERE id = ?');
   return stmt.get(id) as Repository | null;
 }
 
 export function getRepositoryByName(name: string): Repository | null {
-  const stmt = db.prepare('SELECT * FROM repositories WHERE name = ?');
+  const stmt = db.query('SELECT * FROM repositories WHERE name = ?');
   return stmt.get(name) as Repository | null;
 }
 
 export function getRepositoryByPath(path: string): Repository | null {
-  const stmt = db.prepare('SELECT * FROM repositories WHERE path = ?');
+  const stmt = db.query('SELECT * FROM repositories WHERE path = ?');
   return stmt.get(path) as Repository | null;
 }
 
 export function getAllRepositories(): Repository[] {
-  const stmt = db.prepare('SELECT * FROM repositories ORDER BY created_at DESC');
+  const stmt = db.query('SELECT * FROM repositories ORDER BY created_at DESC');
   return stmt.all() as Repository[];
 }
 
@@ -79,7 +79,7 @@ export function updateRepository(id: number, updates: Partial<CreateRepositoryIn
 
   values.push(id);
 
-  const stmt = db.prepare(`
+  const stmt = db.query(`
     UPDATE repositories
     SET ${fields.join(', ')}
     WHERE id = ?
@@ -90,17 +90,17 @@ export function updateRepository(id: number, updates: Partial<CreateRepositoryIn
 }
 
 export function deleteRepository(id: number): void {
-  const stmt = db.prepare('DELETE FROM repositories WHERE id = ?');
+  const stmt = db.query('DELETE FROM repositories WHERE id = ?');
   stmt.run(id);
 }
 
 export function deleteRepositoryByName(name: string): void {
-  const stmt = db.prepare('DELETE FROM repositories WHERE name = ?');
+  const stmt = db.query('DELETE FROM repositories WHERE name = ?');
   stmt.run(name);
 }
 
 export function getRepositoryCount(): number {
-  const stmt = db.prepare('SELECT COUNT(*) as count FROM repositories');
+  const stmt = db.query('SELECT COUNT(*) as count FROM repositories');
   const result = stmt.get() as { count: number };
   return result.count;
 }

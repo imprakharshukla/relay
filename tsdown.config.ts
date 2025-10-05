@@ -7,7 +7,7 @@ export default defineConfig({
   clean: true,
   shims: true,
   banner: {
-    js: '#!/usr/bin/env node'
+    js: '#!/usr/bin/env bun'
   },
   minify: false,
   sourcemap: true,
@@ -21,6 +21,7 @@ export default defineConfig({
     'execa',
     '@linear/sdk',
     '@ai-sdk/openai',
-    'ai'
+    'ai',
+    'bun:sqlite'
   ]
 })

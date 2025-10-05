@@ -6,13 +6,13 @@ export interface Setting {
 }
 
 export function getSetting(key: string): string | null {
-  const stmt = db.prepare('SELECT value FROM settings WHERE key = ?');
+  const stmt = db.query('SELECT value FROM settings WHERE key = ?');
   const result = stmt.get(key) as Setting | undefined;
   return result?.value ?? null;
 }
 
 export function setSetting(key: string, value: string): void {
-  const stmt = db.prepare(`
+  const stmt = db.query(`
     INSERT INTO settings (key, value)
     VALUES (?, ?)
     ON CONFLICT(key) DO UPDATE SET value = excluded.value
@@ -21,12 +21,12 @@ export function setSetting(key: string, value: string): void {
 }
 
 export function deleteSetting(key: string): void {
-  const stmt = db.prepare('DELETE FROM settings WHERE key = ?');
+  const stmt = db.query('DELETE FROM settings WHERE key = ?');
   stmt.run(key);
 }
 
 export function getAllSettings(): Record<string, string> {
-  const stmt = db.prepare('SELECT key, value FROM settings');
+  const stmt = db.query('SELECT key, value FROM settings');
   const results = stmt.all() as Setting[];
 
   const settings: Record<string, string> = {};
