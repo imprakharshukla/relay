@@ -1,3 +1,9 @@
+## [3.0.1](https://github.com/imprakharshukla/relay/compare/v3.0.0...v3.0.1) (2025-10-05)
+
+### Bug Fixes
+
+* read version dynamically from package.json ([55025ad](https://github.com/imprakharshukla/relay/commit/55025ad3778b5c928eb5f7fcd485126a0a5bb740))
+
 ## [3.0.0](https://github.com/imprakharshukla/relay/compare/v2.0.0...v3.0.0) (2025-10-05)
 
 ### ⚠ BREAKING CHANGES
