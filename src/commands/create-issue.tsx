@@ -152,7 +152,7 @@ export const CreateIssue: React.FC<CreateIssueProps> = ({ task, repoName }) => {
       setStep('worktree');
       const worktreePath = await createWorktree(
         repo.path,
-        repo.worktree_base,
+        repo.worktreeBase || '../worktrees',
         branch
       );
 

@@ -1,12 +1,14 @@
+import { eq, desc } from 'drizzle-orm';
 import db from './index.js';
+import { repositories } from './schema.js';
 
 export interface Repository {
   id: number;
   name: string;
   path: string;
-  worktree_base: string;
+  worktreeBase: string | null;
   editor: string | null;
-  created_at: string;
+  createdAt: string | null;
 }
 
 export interface CreateRepositoryInput {
@@ -17,90 +19,72 @@ export interface CreateRepositoryInput {
 }
 
 export function createRepository(input: CreateRepositoryInput): Repository {
-  const stmt = db.query(`
-    INSERT INTO repositories (name, path, worktree_base, editor)
-    VALUES (?, ?, ?, ?)
-  `);
+  const result = db.insert(repositories)
+    .values({
+      name: input.name,
+      path: input.path,
+      worktreeBase: input.worktree_base || '../worktrees',
+      editor: input.editor || null,
+    })
+    .returning()
+    .get();
 
-  const result = stmt.run(
-    input.name,
-    input.path,
-    input.worktree_base || '../worktrees',
-    input.editor || null
-  );
-
-  return getRepositoryById(result.lastInsertRowid as number)!;
+  return result as Repository;
 }
 
 export function getRepositoryById(id: number): Repository | null {
-  const stmt = db.query('SELECT * FROM repositories WHERE id = ?');
-  return stmt.get(id) as Repository | null;
+  return db.select().from(repositories).where(eq(repositories.id, id)).get() as Repository | null;
 }
 
 export function getRepositoryByName(name: string): Repository | null {
-  const stmt = db.query('SELECT * FROM repositories WHERE name = ?');
-  return stmt.get(name) as Repository | null;
+  return db.select().from(repositories).where(eq(repositories.name, name)).get() as Repository | null;
 }
 
 export function getRepositoryByPath(path: string): Repository | null {
-  const stmt = db.query('SELECT * FROM repositories WHERE path = ?');
-  return stmt.get(path) as Repository | null;
+  return db.select().from(repositories).where(eq(repositories.path, path)).get() as Repository | null;
 }
 
 export function getAllRepositories(): Repository[] {
-  const stmt = db.query('SELECT * FROM repositories ORDER BY created_at DESC');
-  return stmt.all() as Repository[];
+  return db.select().from(repositories).orderBy(desc(repositories.createdAt)).all() as Repository[];
 }
 
 export function updateRepository(id: number, updates: Partial<CreateRepositoryInput>): Repository | null {
-  const fields: string[] = [];
-  const values: any[] = [];
+  const updateData: any = {};
 
   if (updates.name !== undefined) {
-    fields.push('name = ?');
-    values.push(updates.name);
+    updateData.name = updates.name;
   }
   if (updates.path !== undefined) {
-    fields.push('path = ?');
-    values.push(updates.path);
+    updateData.path = updates.path;
   }
   if (updates.worktree_base !== undefined) {
-    fields.push('worktree_base = ?');
-    values.push(updates.worktree_base);
+    updateData.worktreeBase = updates.worktree_base;
   }
   if (updates.editor !== undefined) {
-    fields.push('editor = ?');
-    values.push(updates.editor);
+    updateData.editor = updates.editor;
   }
 
-  if (fields.length === 0) {
+  if (Object.keys(updateData).length === 0) {
     return getRepositoryById(id);
   }
 
-  values.push(id);
+  db.update(repositories)
+    .set(updateData)
+    .where(eq(repositories.id, id))
+    .run();
 
-  const stmt = db.query(`
-    UPDATE repositories
-    SET ${fields.join(', ')}
-    WHERE id = ?
-  `);
-
-  stmt.run(...values);
   return getRepositoryById(id);
 }
 
 export function deleteRepository(id: number): void {
-  const stmt = db.query('DELETE FROM repositories WHERE id = ?');
-  stmt.run(id);
+  db.delete(repositories).where(eq(repositories.id, id)).run();
 }
 
 export function deleteRepositoryByName(name: string): void {
-  const stmt = db.query('DELETE FROM repositories WHERE name = ?');
-  stmt.run(name);
+  db.delete(repositories).where(eq(repositories.name, name)).run();
 }
 
 export function getRepositoryCount(): number {
-  const stmt = db.query('SELECT COUNT(*) as count FROM repositories');
-  const result = stmt.get() as { count: number };
-  return result.count;
+  const result = db.select({ count: repositories.id }).from(repositories).all();
+  return result.length;
 }

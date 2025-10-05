@@ -22,7 +22,7 @@ export const WorktreeOpen: React.FC<WorktreeOpenProps> = ({ issueIdentifier }) =
     );
   }
 
-  const repo = getRepositoryById(worktree.repo_id);
+  const repo = getRepositoryById(worktree.repoId);
   if (!repo) {
     return (
       <Box>

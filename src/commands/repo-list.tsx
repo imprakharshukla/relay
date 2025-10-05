@@ -35,7 +35,7 @@ export const RepoList: React.FC = () => {
               <Text dimColor> ({worktreeCount} worktree{worktreeCount !== 1 ? 's' : ''})</Text>
             </Box>
             <Text dimColor>  Path: {repo.path}</Text>
-            <Text dimColor>  Worktree base: {repo.worktree_base}</Text>
+            <Text dimColor>  Worktree base: {repo.worktreeBase}</Text>
             {repo.editor && <Text dimColor>  Editor: {repo.editor}</Text>}
           </Box>
         );

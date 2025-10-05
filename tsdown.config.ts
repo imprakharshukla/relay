@@ -7,7 +7,7 @@ export default defineConfig({
   clean: true,
   shims: true,
   banner: {
-    js: '#!/usr/bin/env bun'
+    js: '#!/usr/bin/env node'
   },
   minify: false,
   sourcemap: true,
@@ -22,6 +22,7 @@ export default defineConfig({
     '@linear/sdk',
     '@ai-sdk/openai',
     'ai',
-    'bun:sqlite'
+    'better-sqlite3',
+    'drizzle-orm'
   ]
 })

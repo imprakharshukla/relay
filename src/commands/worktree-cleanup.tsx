@@ -37,7 +37,7 @@ export const WorktreeCleanup: React.FC = () => {
       return;
     }
 
-    const repo = getRepositoryById(worktree.repo_id);
+    const repo = getRepositoryById(worktree.repoId);
     if (!repo) {
       setError('Repository not found');
       setStep('select');

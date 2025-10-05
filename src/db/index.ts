@@ -1,7 +1,10 @@
-import { Database } from 'bun:sqlite';
+import Database from 'better-sqlite3';
+import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { homedir } from 'os';
 import { join } from 'path';
 import { existsSync, mkdirSync } from 'fs';
+import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
+import * as schema from './schema.js';
 
 const DB_DIR = join(homedir(), '.relay');
 const DB_PATH = join(DB_DIR, 'relay.db');
@@ -12,15 +15,18 @@ if (!existsSync(DB_DIR)) {
 }
 
 // Create database connection
-export const db = new Database(DB_PATH);
+const sqlite = new Database(DB_PATH);
 
 // Enable foreign keys
-db.exec('PRAGMA foreign_keys = ON');
+sqlite.pragma('foreign_keys = ON');
+
+// Create Drizzle instance
+export const db = drizzle(sqlite, { schema });
 
 // Initialize database schema
 export function initializeDatabase() {
   // Settings table
-  db.exec(`
+  sqlite.exec(`
     CREATE TABLE IF NOT EXISTS settings (
       key TEXT PRIMARY KEY,
       value TEXT NOT NULL
@@ -28,7 +34,7 @@ export function initializeDatabase() {
   `);
 
   // Repositories table
-  db.exec(`
+  sqlite.exec(`
     CREATE TABLE IF NOT EXISTS repositories (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL UNIQUE,
@@ -40,7 +46,7 @@ export function initializeDatabase() {
   `);
 
   // Worktrees table
-  db.exec(`
+  sqlite.exec(`
     CREATE TABLE IF NOT EXISTS worktrees (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       repo_id INTEGER NOT NULL,
@@ -55,11 +61,11 @@ export function initializeDatabase() {
   `);
 
   // Create indexes
-  db.exec(`
+  sqlite.exec(`
     CREATE INDEX IF NOT EXISTS idx_worktrees_repo ON worktrees(repo_id)
   `);
 
-  db.exec(`
+  sqlite.exec(`
     CREATE INDEX IF NOT EXISTS idx_worktrees_issue ON worktrees(issue_identifier)
   `);
 }

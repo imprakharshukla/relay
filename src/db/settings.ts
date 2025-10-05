@@ -1,4 +1,6 @@
+import { eq } from 'drizzle-orm';
 import db from './index.js';
+import { settings } from './schema.js';
 
 export interface Setting {
   key: string;
@@ -6,34 +8,32 @@ export interface Setting {
 }
 
 export function getSetting(key: string): string | null {
-  const stmt = db.query('SELECT value FROM settings WHERE key = ?');
-  const result = stmt.get(key) as Setting | undefined;
+  const result = db.select().from(settings).where(eq(settings.key, key)).get();
   return result?.value ?? null;
 }
 
 export function setSetting(key: string, value: string): void {
-  const stmt = db.query(`
-    INSERT INTO settings (key, value)
-    VALUES (?, ?)
-    ON CONFLICT(key) DO UPDATE SET value = excluded.value
-  `);
-  stmt.run(key, value);
+  db.insert(settings)
+    .values({ key, value })
+    .onConflictDoUpdate({
+      target: settings.key,
+      set: { value },
+    })
+    .run();
 }
 
 export function deleteSetting(key: string): void {
-  const stmt = db.query('DELETE FROM settings WHERE key = ?');
-  stmt.run(key);
+  db.delete(settings).where(eq(settings.key, key)).run();
 }
 
 export function getAllSettings(): Record<string, string> {
-  const stmt = db.query('SELECT key, value FROM settings');
-  const results = stmt.all() as Setting[];
+  const results = db.select().from(settings).all();
 
-  const settings: Record<string, string> = {};
+  const settingsMap: Record<string, string> = {};
   for (const { key, value } of results) {
-    settings[key] = value;
+    settingsMap[key] = value;
   }
-  return settings;
+  return settingsMap;
 }
 
 // Convenience functions for specific settings

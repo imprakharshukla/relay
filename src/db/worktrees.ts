@@ -1,15 +1,16 @@
+import { eq, desc } from 'drizzle-orm';
 import db from './index.js';
-import type { Repository } from './repositories.js';
+import { worktrees, repositories } from './schema.js';
 
 export interface Worktree {
   id: number;
-  repo_id: number;
-  issue_id: string;
-  issue_identifier: string;
-  issue_title: string | null;
-  branch_name: string;
+  repoId: number;
+  issueId: string;
+  issueIdentifier: string;
+  issueTitle: string | null;
+  branchName: string;
   path: string;
-  created_at: string;
+  createdAt: string | null;
 }
 
 export interface WorktreeWithRepo extends Worktree {
@@ -27,88 +28,100 @@ export interface CreateWorktreeInput {
 }
 
 export function createWorktree(input: CreateWorktreeInput): Worktree {
-  const stmt = db.query(`
-    INSERT INTO worktrees (repo_id, issue_id, issue_identifier, issue_title, branch_name, path)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `);
+  const result = db.insert(worktrees)
+    .values({
+      repoId: input.repo_id,
+      issueId: input.issue_id,
+      issueIdentifier: input.issue_identifier,
+      issueTitle: input.issue_title || null,
+      branchName: input.branch_name,
+      path: input.path,
+    })
+    .returning()
+    .get();
 
-  const result = stmt.run(
-    input.repo_id,
-    input.issue_id,
-    input.issue_identifier,
-    input.issue_title || null,
-    input.branch_name,
-    input.path
-  );
-
-  return getWorktreeById(result.lastInsertRowid as number)!;
+  return result as Worktree;
 }
 
 export function getWorktreeById(id: number): Worktree | null {
-  const stmt = db.query('SELECT * FROM worktrees WHERE id = ?');
-  return stmt.get(id) as Worktree | null;
+  return db.select().from(worktrees).where(eq(worktrees.id, id)).get() as Worktree | null;
 }
 
 export function getWorktreeByIssueIdentifier(issueIdentifier: string): Worktree | null {
-  const stmt = db.query('SELECT * FROM worktrees WHERE issue_identifier = ?');
-  return stmt.get(issueIdentifier) as Worktree | null;
+  return db.select().from(worktrees).where(eq(worktrees.issueIdentifier, issueIdentifier)).get() as Worktree | null;
 }
 
 export function getWorktreesByRepo(repoId: number): Worktree[] {
-  const stmt = db.query('SELECT * FROM worktrees WHERE repo_id = ? ORDER BY created_at DESC');
-  return stmt.all(repoId) as Worktree[];
+  return db.select()
+    .from(worktrees)
+    .where(eq(worktrees.repoId, repoId))
+    .orderBy(desc(worktrees.createdAt))
+    .all() as Worktree[];
 }
 
 export function getAllWorktrees(): Worktree[] {
-  const stmt = db.query('SELECT * FROM worktrees ORDER BY created_at DESC');
-  return stmt.all() as Worktree[];
+  return db.select()
+    .from(worktrees)
+    .orderBy(desc(worktrees.createdAt))
+    .all() as Worktree[];
 }
 
 export function getAllWorktreesWithRepo(): WorktreeWithRepo[] {
-  const stmt = db.query(`
-    SELECT
-      w.*,
-      r.name as repo_name,
-      r.path as repo_path
-    FROM worktrees w
-    JOIN repositories r ON w.repo_id = r.id
-    ORDER BY w.created_at DESC
-  `);
-  return stmt.all() as WorktreeWithRepo[];
+  return db.select({
+    id: worktrees.id,
+    repoId: worktrees.repoId,
+    issueId: worktrees.issueId,
+    issueIdentifier: worktrees.issueIdentifier,
+    issueTitle: worktrees.issueTitle,
+    branchName: worktrees.branchName,
+    path: worktrees.path,
+    createdAt: worktrees.createdAt,
+    repo_name: repositories.name,
+    repo_path: repositories.path,
+  })
+    .from(worktrees)
+    .innerJoin(repositories, eq(worktrees.repoId, repositories.id))
+    .orderBy(desc(worktrees.createdAt))
+    .all() as WorktreeWithRepo[];
 }
 
 export function getWorktreesWithRepoByRepoId(repoId: number): WorktreeWithRepo[] {
-  const stmt = db.query(`
-    SELECT
-      w.*,
-      r.name as repo_name,
-      r.path as repo_path
-    FROM worktrees w
-    JOIN repositories r ON w.repo_id = r.id
-    WHERE w.repo_id = ?
-    ORDER BY w.created_at DESC
-  `);
-  return stmt.all(repoId) as WorktreeWithRepo[];
+  return db.select({
+    id: worktrees.id,
+    repoId: worktrees.repoId,
+    issueId: worktrees.issueId,
+    issueIdentifier: worktrees.issueIdentifier,
+    issueTitle: worktrees.issueTitle,
+    branchName: worktrees.branchName,
+    path: worktrees.path,
+    createdAt: worktrees.createdAt,
+    repo_name: repositories.name,
+    repo_path: repositories.path,
+  })
+    .from(worktrees)
+    .innerJoin(repositories, eq(worktrees.repoId, repositories.id))
+    .where(eq(worktrees.repoId, repoId))
+    .orderBy(desc(worktrees.createdAt))
+    .all() as WorktreeWithRepo[];
 }
 
 export function deleteWorktree(id: number): void {
-  const stmt = db.query('DELETE FROM worktrees WHERE id = ?');
-  stmt.run(id);
+  db.delete(worktrees).where(eq(worktrees.id, id)).run();
 }
 
 export function deleteWorktreeByIssueIdentifier(issueIdentifier: string): void {
-  const stmt = db.query('DELETE FROM worktrees WHERE issue_identifier = ?');
-  stmt.run(issueIdentifier);
+  db.delete(worktrees).where(eq(worktrees.issueIdentifier, issueIdentifier)).run();
 }
 
 export function getWorktreeCount(): number {
-  const stmt = db.query('SELECT COUNT(*) as count FROM worktrees');
-  const result = stmt.get() as { count: number };
-  return result.count;
+  const result = db.select({ count: worktrees.id }).from(worktrees).all();
+  return result.length;
 }
 
 export function getWorktreeCountByRepo(repoId: number): number {
-  const stmt = db.query('SELECT COUNT(*) as count FROM worktrees WHERE repo_id = ?');
-  const result = stmt.get(repoId) as { count: number };
-  return result.count;
+  const result = db.select({ count: worktrees.id })
+    .from(worktrees)
+    .where(eq(worktrees.repoId, repoId))
+    .all();
+  return result.length;
 }
