@@ -1,3 +1,9 @@
+## [3.1.0](https://github.com/imprakharshukla/relay/compare/v3.0.1...v3.1.0) (2025-10-06)
+
+### Features
+
+* fetch Linear issue by ID and create worktree ([a65d6e7](https://github.com/imprakharshukla/relay/commit/a65d6e7d21d8ac5758541d50ce985e1b603d7648))
+
 ## [3.0.1](https://github.com/imprakharshukla/relay/compare/v3.0.0...v3.0.1) (2025-10-05)
 
 ### Bug Fixes
