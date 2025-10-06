@@ -90,10 +90,17 @@ export class LinearService {
     }
   }
 
-  async getIssue(issueId: string): Promise<Issue> {
+  async getIssue(issueIdentifier: string): Promise<{ id: string; identifier: string; title: string; branchName: string } | null> {
     try {
-      const issue = await this.client.issue(issueId);
-      return issue;
+      const issue = await this.client.issue(issueIdentifier);
+      if (!issue) return null;
+
+      return {
+        id: issue.id,
+        identifier: issue.identifier,
+        title: issue.title,
+        branchName: issue.branchName,
+      };
     } catch (error: any) {
       throw new Error(`Failed to fetch issue: ${error.message}`);
     }

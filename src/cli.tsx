@@ -14,6 +14,7 @@ import { WorktreeList } from './commands/worktree-list.js';
 import { WorktreeOpen } from './commands/worktree-open.js';
 import { WorktreeCleanup } from './commands/worktree-cleanup.js';
 import { Config } from './commands/config.js';
+import { FetchIssue } from './commands/fetch-issue.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -131,8 +132,8 @@ program
       // Check if input looks like an issue ID (e.g., ENG-123, TEAM-456)
       const issueIdPattern = /^[A-Z]+-\d+$/i;
       if (issueIdPattern.test(task)) {
-        // Open existing issue
-        render(<WorktreeOpen issueIdentifier={task.toUpperCase()} />);
+        // Fetch issue from Linear and create worktree
+        render(<FetchIssue issueIdentifier={task.toUpperCase()} repoName={options.repo} />);
       } else {
         // Create new issue
         render(<CreateIssue task={task} repoName={options.repo} />);

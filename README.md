@@ -49,12 +49,14 @@ relay repo add
 ```
 
 **First time setup includes:**
+
 - OpenRouter API Key (get one at [openrouter.ai](https://openrouter.ai/))
 - Linear API Key (get one at [linear.app/settings/api](https://linear.app/settings/api))
 - Default editor preference
 - Auto-detects your Linear team
 
 **Adds repository with:**
+
 - Repository name (auto-suggests from folder)
 - Git repository path
 - Worktree base directory
@@ -70,6 +72,7 @@ relay create "fix button styling"
 ```
 
 **Relay will:**
+
 1. ✅ Let you select a repository (if you have multiple)
 2. 📊 Fetch Linear context (projects, labels, teams)
 3. 🤖 AI analyzes your task
@@ -160,6 +163,7 @@ relay config set-editor zed
 ### Global Architecture
 
 Relay uses a **centralized SQLite database** (`~/.relay/relay.db`) to manage:
+
 - All your repositories
 - Active worktrees across all repos
 - API keys and global settings
@@ -199,6 +203,7 @@ relay open ENG-123
 ### Global Database
 
 All data stored in `~/.relay/relay.db`:
+
 - API keys (OpenRouter, Linear)
 - Default editor preference
 - Repository configurations
@@ -207,16 +212,18 @@ All data stored in `~/.relay/relay.db`:
 ### Per-Repository Settings
 
 Each repository can have:
+
 - Custom editor (overrides global)
 - Custom worktree base path
 - Repository-specific metadata
 
 Edit with:
+
 ```bash
 relay repo edit <name> --editor cursor
 ```
 
-## 🎯 Advanced Features
+## 🎯 Advanced Fecladeatures
 
 ### AI Model Configuration
 
@@ -229,6 +236,7 @@ constructor(apiKey: string, model: string = 'x-ai/grok-4-fast') {
 ### Custom Worktree Paths
 
 Per-repository worktree configuration:
+
 ```bash
 relay repo edit my-app --worktree-base ~/worktrees
 ```
@@ -236,6 +244,7 @@ relay repo edit my-app --worktree-base ~/worktrees
 ### Multiple Repositories
 
 Relay is designed for managing multiple projects:
+
 - Each repo has its own settings
 - Worktrees are tracked per-repo
 - Global view of all work across projects
