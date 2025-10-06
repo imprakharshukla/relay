@@ -1,3 +1,9 @@
+## [3.1.1](https://github.com/imprakharshukla/relay/compare/v3.1.0...v3.1.1) (2025-10-06)
+
+### Bug Fixes
+
+* improve package.json version reading with fallback paths ([8b94498](https://github.com/imprakharshukla/relay/commit/8b944987823945d8c3954b43790fc8eabbf59472))
+
 ## [3.1.0](https://github.com/imprakharshukla/relay/compare/v3.0.1...v3.1.0) (2025-10-06)
 
 ### Features
