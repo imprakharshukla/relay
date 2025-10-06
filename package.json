@@ -7,8 +7,7 @@
     "relay": "./dist/cli.js"
   },
   "files": [
-    "dist",
-    "package.json"
+    "dist"
   ],
   "scripts": {
     "dev": "bun run src/cli.tsx",

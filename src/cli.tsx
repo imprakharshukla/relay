@@ -2,7 +2,7 @@
 import React from 'react';
 import { render } from 'ink';
 import { Command } from 'commander';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { RepoAdd } from './commands/repo-add.js';
@@ -16,16 +16,32 @@ import { WorktreeCleanup } from './commands/worktree-cleanup.js';
 import { Config } from './commands/config.js';
 import { FetchIssue } from './commands/fetch-issue.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const packageJson = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8'));
+// Read package.json for version
+let version = '0.0.0';
+try {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+
+  // Try reading from parent directory first (for npm installed package)
+  let packagePath = join(__dirname, '../package.json');
+  if (!existsSync(packagePath)) {
+    // Fallback for development
+    packagePath = join(__dirname, '../../package.json');
+  }
+
+  const packageJson = JSON.parse(readFileSync(packagePath, 'utf-8'));
+  version = packageJson.version;
+} catch (err) {
+  // Fallback if reading fails
+  version = '0.0.0';
+}
 
 const program = new Command();
 
 program
   .name('relay')
   .description('AI-powered Linear issue creation with automatic git worktree setup')
-  .version(packageJson.version);
+  .version(version);
 
 // Repository management
 const repo = program.command('repo').description('Manage repositories');
